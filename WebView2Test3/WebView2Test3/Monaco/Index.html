@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        document.getElementById("btn").addEventListener("click", async e => {
+            // Access the host object asynchronously
+            const source = chrome.webview.hostObjects.source;
+            await source.DelayAsync(1000);  // Call async methods
+            const name = await source.Name; // Get property value
+
+            // Access the host object synchronously
+            // This is not recommended as it may block the UI thread of the webview.
+            const sourceSync = chrome.webview.hostObjects.sync.source;
+            sourceSync.OnClick();                     // Call sync method
+            const clickCount = sourceSync.ClickCount; // Get property value
+            const index = sourceSync.Items[0];        // Get indexer value
+            //sourceSync.Name = "new name";             // Set property value
+
+            document.getElementById("result").textContent = `${name} ${clickCount}`;
+        });
+    </script>
+</head>
+<body>
+    <button id="btn" type="button">Click me</button>
+    <output id="result"></output>
+    <button id="btn2" type="button">Do not click me</button>
+</body>
+</html>
